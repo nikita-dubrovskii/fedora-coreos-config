@@ -68,8 +68,9 @@ declare -A extra_groups_static=( \
 )
 for groupname in "${!extra_groups_static[@]}"; do
     gid="${extra_groups_static[$groupname]}";
-    if [[ $(getent group "${groupname}") != ${groupname}:x:${gid}:* ]]; then
-        getent group
+    sys_group=$(getent group "${groupname}")
+    if [[ ${sys_group} != ${groupname}:x:${gid}:* ]]; then
+        echo "$groupname:x:$gid != ${sys_group}"
         fatal "failure on extra_group_static entry ${groupname}"
     fi
 done
